@@ -1,0 +1,55 @@
+{
+  "usuarios": [
+    {
+      "id": "admin-001",
+      "nombre": "Administrador",
+      "correo": "admin@maykerbike.com",
+      "contrasena": "mayker2026",
+      "rol": "admin",
+      "fecha_registro": "2026-06-23T14:45:06.556Z"
+    }
+  ],
+  "sorteos": [
+    {
+      "id": "sorteo-001",
+      "nombre_producto": "Casco Racing Pro X1",
+      "descripcion": "Casco de alto rendimiento con certificación ECE 22.06, ventilación avanzada, visera anti-arañazos y sistema de liberación de emergencia. Ideal para circuito y calle.",
+      "imagen": "/images/raffle-helmet.jpg",
+      "precio_ticket": 10,
+      "cantidad_tickets": 100,
+      "fecha_sorteo": "2026-07-23T14:45:06.556Z",
+      "estado": "activo",
+      "fecha_creacion": "2026-06-23T14:45:06.556Z"
+    },
+    {
+      "id": "sorteo-002",
+      "nombre_producto": "Chaqueta Moto Leather Sport",
+      "descripcion": "Chaqueta de cuero genuino con protecciones CE nivel 2 en hombros, codos y espalda. Forro térmico removible, costuras reforzadas y estilo deportivo premium.",
+      "imagen": "/images/raffle-jacket.jpg",
+      "precio_ticket": 15,
+      "cantidad_tickets": 200,
+      "fecha_sorteo": "2026-08-07T14:45:06.556Z",
+      "estado": "activo",
+      "fecha_creacion": "2026-06-23T14:45:06.556Z"
+    },
+    {
+      "id": "sorteo-003",
+      "nombre_producto": "Guantes Moto Carbon Pro",
+      "descripcion": "Guantes de motociclismo con nudilleras de carbono, palma reforzada anti-abrasión, compatible con pantallas táctiles y cierre ajustable. Máxima protección y confort.",
+      "imagen": "/images/raffle-gloves.jpg",
+      "precio_ticket": 5,
+      "cantidad_tickets": 150,
+      "fecha_sorteo": "2026-07-08T14:45:06.556Z",
+      "estado": "activo",
+      "fecha_creacion": "2026-06-23T14:45:06.556Z"
+    }
+  ],
+  "compras": [],
+  "tickets": [],
+  "configuracion": {
+    "id": "1",
+    "numero_yape": "999-888-777",
+    "titular_yape": "MaykerBike Oficial"
+  },
+  "currentUser": null
+}

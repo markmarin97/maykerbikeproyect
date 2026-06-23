@@ -57,8 +57,40 @@ const DEMO_SORTEOS: Sorteo[] = [
   },
 ];
 
-// ── localStorage helpers ───────────────────────────────────
+// ── Persistence helpers ───────────────────────────────────
 const STORAGE_KEY = 'maykerbike_data';
+const DEFAULT_BACKEND_URL = 'http://localhost:4000';
+
+const getBackendUrl = () => {
+  if (typeof window === 'undefined') return '';
+  return import.meta.env.VITE_BACKEND_URL || DEFAULT_BACKEND_URL;
+};
+
+async function loadBackendState(): Promise<AppState | null> {
+  if (typeof window === 'undefined') return null;
+  const backendUrl = getBackendUrl();
+  try {
+    const response = await fetch(`${backendUrl}/api/state`, { cache: 'no-store' });
+    if (!response.ok) return null;
+    return await response.json() as AppState;
+  } catch {
+    return null;
+  }
+}
+
+async function saveBackendState(state: AppState): Promise<void> {
+  if (typeof window === 'undefined') return;
+  const backendUrl = getBackendUrl();
+  try {
+    await fetch(`${backendUrl}/api/state`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(state),
+    });
+  } catch {
+    // ignore backend save errors
+  }
+}
 
 function loadState(): AppState {
   try {
@@ -98,7 +130,13 @@ const listeners: Set<() => void> = new Set();
 function setState(updater: (prev: AppState) => AppState) {
   globalState = updater(globalState);
   saveState(globalState);
+  void saveBackendState(globalState);
   listeners.forEach(l => l());
+  if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+    const channel = new BroadcastChannel('maykerbike_sync');
+    channel.postMessage({ type: 'sync' });
+    channel.close();
+  }
 }
 
 // ── Hook ───────────────────────────────────────────────────
@@ -109,6 +147,64 @@ export function useStore() {
     const listener = () => rerender(n => n + 1);
     listeners.add(listener);
     return () => { listeners.delete(listener); };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key !== STORAGE_KEY) return;
+      if (!event.newValue) {
+        globalState = loadState();
+        listeners.forEach(l => l());
+        return;
+      }
+      try {
+        const newState = JSON.parse(event.newValue) as AppState;
+        const hasAdmin = newState.usuarios.some(u => u.rol === 'admin');
+        if (!hasAdmin) newState.usuarios.unshift(ADMIN_USER);
+        globalState = newState;
+        listeners.forEach(l => l());
+      } catch {
+        // ignore malformed data
+      }
+    };
+
+    const channel = typeof window !== 'undefined' && 'BroadcastChannel' in window
+      ? new BroadcastChannel('maykerbike_sync')
+      : null;
+
+    const handleBroadcast = () => {
+      globalState = loadState();
+      listeners.forEach(l => l());
+    };
+
+    const syncFromBackend = async () => {
+      const backendState = await loadBackendState();
+      if (!backendState) return;
+      const hasAdmin = backendState.usuarios.some(u => u.rol === 'admin');
+      if (!hasAdmin) backendState.usuarios.unshift(ADMIN_USER);
+      globalState = backendState;
+      saveState(globalState);
+      listeners.forEach(l => l());
+    };
+
+    const handleFocus = () => {
+      void syncFromBackend();
+    };
+
+    window.addEventListener('storage', handleStorage);
+    channel?.addEventListener('message', handleBroadcast);
+    window.addEventListener('focus', handleFocus);
+
+    void syncFromBackend();
+
+    return () => {
+      window.removeEventListener('storage', handleStorage);
+      channel?.removeEventListener('message', handleBroadcast);
+      channel?.close();
+      window.removeEventListener('focus', handleFocus);
+    };
   }, []);
 
   // ── Auth ────────────────────────────────────────────────
