@@ -352,7 +352,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
               <h4 className="text-white font-bold mb-4 uppercase tracking-wider text-sm">Contacto</h4>
               <div className="space-y-2 text-sm text-gray-400">
                 <p>📧 contacto@maykerbike.com</p>
-                <p>📱 +51 999 888 777</p>
+                <p>📱 +51 961 359 573</p>
                 <p>🌐 www.maykerbike.com</p>
               </div>
             </div>

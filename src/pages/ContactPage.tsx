@@ -30,9 +30,9 @@ export default function ContactPage() {
 
   const contactInfo = [
     { icon: Mail, label: 'Email', value: 'contacto@maykerbike.com', color: 'text-red-400' },
-    { icon: Phone, label: 'WhatsApp', value: '+51 999 888 777', color: 'text-green-400' },
-    { icon: MapPin, label: 'Ubicación', value: 'Lima, Perú', color: 'text-orange-400' },
-    { icon: Clock, label: 'Horario', value: 'Lun - Sáb: 9am - 6pm', color: 'text-blue-400' },
+    { icon: Phone, label: 'WhatsApp', value: '+51 961 359 573', color: 'text-green-400' },
+    { icon: MapPin, label: 'Ubicación', value: 'Cajamarca, Perú', color: 'text-orange-400' },
+    { icon: Clock, label: 'Horario', value: 'Lun - Sáb: 8am - 6pm', color: 'text-blue-400' },
   ];
 
   const faqs = [

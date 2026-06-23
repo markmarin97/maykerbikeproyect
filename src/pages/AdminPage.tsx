@@ -676,7 +676,7 @@ export default function AdminPage({ onNavigate }: { onNavigate: (page: string) =
                         type="tel"
                         value={configForm.numero_yape}
                         onChange={e => setConfigForm(f => ({ ...f, numero_yape: e.target.value }))}
-                        placeholder="999-888-777"
+                        placeholder="961 359 573"
                         className="w-full bg-gray-800 border border-white/10 focus:border-green-500/50 text-white placeholder-gray-500 px-4 py-3 rounded-xl outline-none transition-all duration-200"
                       />
                     </div>
