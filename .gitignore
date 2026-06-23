@@ -1,0 +1,15 @@
+node_modules/
+dist/
+build/
+.vite/
+.DS_Store
+.env
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.ide/
+.vscode/
+*.local
+*.log
+*.tsbuildinfo

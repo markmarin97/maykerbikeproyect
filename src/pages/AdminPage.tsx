@@ -112,7 +112,7 @@ export default function AdminPage({ onNavigate }: { onNavigate: (page: string) =
     if (sorteoForm.precio_ticket <= 0) { toast.error('El precio debe ser mayor a 0'); return; }
     if (sorteoForm.cantidad_tickets <= 0) { toast.error('La cantidad de tickets debe ser mayor a 0'); return; }
 
-    const data = { ...sorteoForm, fecha_sorteo: new Date(sorteoForm.fecha_sorteo + 'T12:00:00').toISOString() };
+    const data = { ...sorteoForm, fecha_sorteo: new Date(`${sorteoForm.fecha_sorteo}T12:00:00`).toISOString() };
 
     if (editingSorteo) {
       store.editarSorteo(editingSorteo.id, data);
@@ -121,7 +121,10 @@ export default function AdminPage({ onNavigate }: { onNavigate: (page: string) =
       store.crearSorteo(data);
       toast.success('Sorteo creado exitosamente 🎉');
     }
+
     setShowSorteoModal(false);
+    setEditingSorteo(null);
+    setSorteoForm(EMPTY_FORM);
   };
 
   const handleDeleteSorteo = (id: string) => {
@@ -737,7 +740,7 @@ export default function AdminPage({ onNavigate }: { onNavigate: (page: string) =
       {showSorteoModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setShowSorteoModal(false)} />
-          <div className="relative bg-gray-900 border border-white/20 rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+          <div className="relative bg-gray-900 border border-white/20 rounded-3xl shadow-2xl w-full max-w-2xl max-h-[calc(100vh-4rem)] overflow-y-auto" onClick={e => e.stopPropagation()}>
 
             <div className="sticky top-0 bg-gray-900 border-b border-white/10 px-6 py-4 flex items-center justify-between rounded-t-3xl z-10">
               <h2 className="text-white font-black text-lg" style={{ fontFamily: 'Montserrat, sans-serif' }}>
@@ -886,12 +889,14 @@ export default function AdminPage({ onNavigate }: { onNavigate: (page: string) =
 
               <div className="flex gap-3 pt-2">
                 <button
+                  type="button"
                   onClick={() => setShowSorteoModal(false)}
                   className="flex-1 py-3.5 border border-white/20 text-gray-300 font-semibold rounded-xl hover:bg-white/10 transition-colors"
                 >
                   Cancelar
                 </button>
                 <button
+                  type="button"
                   onClick={handleSaveSorteo}
                   className="flex-1 flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-red-600 to-orange-500 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-red-900/50 transition-all duration-200"
                 >
